@@ -38,71 +38,20 @@
 
 #if !TARGET_OS_TV
 #import "FBSDKBoltsMeasurementEventListener.h"
-#import "FBSDKBridgeAPIRequest.h"
-#import "FBSDKBridgeAPIResponse.h"
-#import "FBSDKContainerViewController.h"
 #endif
 
 @implementation FBSDKApplicationDelegate
 
 #pragma mark - Class Methods
 
-+ (void)load
-{
-  // when the app becomes active by any means,  kick off the initialization.
-  [[NSNotificationCenter defaultCenter] addObserver:self
-                                           selector:@selector(initializeWithLaunchData:)
-                                               name:UIApplicationDidFinishLaunchingNotification
-                                             object:nil];
-}
-
-// Initialize SDK listeners
-// Don't call this function in any place else. It should only be called when the class is loaded.
-+ (void)initializeWithLaunchData:(NSNotification *)note
-{
-#if !TARGET_OS_TV
-  // Register Listener for Bolts measurement events
-  [FBSDKBoltsMeasurementEventListener defaultListener];
-#endif
-
-  [FBSDKInternalUtility validateFacebookReservedURLSchemes];
-
-  // Remove the observer
-  [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 + (instancetype)sharedInstance
 {
   static FBSDKApplicationDelegate *_sharedInstance;
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
-    _sharedInstance = [[self alloc] _init];
+    _sharedInstance = [[self alloc] init];
   });
   return _sharedInstance;
-}
-
-#pragma mark - Object Lifecycle
-
-- (instancetype)_init
-{
-  if ((self = [super init]) != nil) {
-    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-    [defaultCenter addObserver:self selector:@selector(applicationDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
-    [defaultCenter addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
-
-    [[FBSDKAppEvents singleton] registerNotifications];
-  }
-  return self;
-}
-
-- (instancetype)init
-{
-  return nil;
-}
-
-- (void)dealloc
-{
-  [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - UIApplicationDelegate
@@ -135,27 +84,6 @@
 {
   NSMutableDictionary *params = [NSMutableDictionary new];
   [params setObject:@1 forKey:@"core_lib_included"];
-  if (objc_lookUpClass("FBSDKShareDialog") != nil) {
-    [params setObject:@1 forKey:@"share_lib_included"];
-  }
-  if (objc_lookUpClass("FBSDKLoginManager") != nil) {
-    [params setObject:@1 forKey:@"login_lib_included"];
-  }
-  if (objc_lookUpClass("FBSDKPlacesManager") != nil) {
-    [params setObject:@1 forKey:@"places_lib_included"];
-  }
-  if (objc_lookUpClass("FBSDKMessengerButton") != nil) {
-    [params setObject:@1 forKey:@"messenger_lib_included"];
-  }
-  if (objc_lookUpClass("FBSDKMessengerButton") != nil) {
-    [params setObject:@1 forKey:@"messenger_lib_included"];
-  }
-  if (objc_lookUpClass("FBSDKTVInterfaceFactory.m") != nil) {
-    [params setObject:@1 forKey:@"tv_lib_included"];
-  }
-  if (objc_lookUpClass("FBSDKAutoLog") != nil) {
-    [params setObject:@1 forKey:@"marketing_lib_included"];
-  }
   [FBSDKAppEvents logEvent:@"fb_sdk_initialize" parameters:params];
 }
 
