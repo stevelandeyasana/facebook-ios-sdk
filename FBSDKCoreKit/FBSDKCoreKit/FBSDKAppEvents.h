@@ -209,26 +209,6 @@ FBSDK_EXTERN NSString *const FBSDKAppEventParameterValueNo;
       parameters:(NSDictionary *)parameters
      accessToken:(FBSDKAccessToken *)accessToken;
 
-
-/*
- * Push Notifications Logging
- */
-
-/**
-  Log an app event that tracks that the application was open via Push Notification.
-
- - Parameter payload: Notification payload received via `UIApplicationDelegate`.
- */
-+ (void)logPushNotificationOpen:(NSDictionary *)payload;
-
-/**
-  Log an app event that tracks that a custom action was taken from a push notification.
-
- - Parameter payload: Notification payload received via `UIApplicationDelegate`.
- - Parameter action:  Name of the action that was taken.
- */
-+ (void)logPushNotificationOpen:(NSDictionary *)payload action:(NSString *)action;
-
 /**
 
   Notifies the events system that the app has launched and, when appropriate, logs an "activated app" event.
@@ -249,21 +229,6 @@ FBSDK_EXTERN NSString *const FBSDKAppEventParameterValueNo;
  is all visible in your app's App Events Insights.
  */
 + (void)activateApp;
-
-/*
- * Push Notifications Registration
- */
-
-/**
-  Sets and sends device token to register the current application for push notifications.
-
-
-
- Sets and sends a device token from `NSData` representation that you get from `UIApplicationDelegate.-application:didRegisterForRemoteNotificationsWithDeviceToken:`.
-
- - Parameter deviceToken: Device token data.
- */
-+ (void)setPushNotificationsDeviceToken:(NSData *)deviceToken;
 
 /*
  * Control over event batching/flushing

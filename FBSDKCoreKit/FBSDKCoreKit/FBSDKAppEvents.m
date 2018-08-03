@@ -44,25 +44,6 @@
 // Public event names
 //
 
-// General purpose
-NSString *const FBSDKAppEventNameCompletedRegistration   = @"fb_mobile_complete_registration";
-NSString *const FBSDKAppEventNameViewedContent           = @"fb_mobile_content_view";
-NSString *const FBSDKAppEventNameSearched                = @"fb_mobile_search";
-NSString *const FBSDKAppEventNameRated                   = @"fb_mobile_rate";
-NSString *const FBSDKAppEventNameCompletedTutorial       = @"fb_mobile_tutorial_completion";
-NSString *const FBSDKAppEventParameterLaunchSource       = @"fb_mobile_launch_source";
-
-// Ecommerce related
-NSString *const FBSDKAppEventNameAddedToCart             = @"fb_mobile_add_to_cart";
-NSString *const FBSDKAppEventNameAddedToWishlist         = @"fb_mobile_add_to_wishlist";
-NSString *const FBSDKAppEventNameInitiatedCheckout       = @"fb_mobile_initiated_checkout";
-NSString *const FBSDKAppEventNameAddedPaymentInfo        = @"fb_mobile_add_payment_info";
-
-// Gaming related
-NSString *const FBSDKAppEventNameAchievedLevel           = @"fb_mobile_level_achieved";
-NSString *const FBSDKAppEventNameUnlockedAchievement     = @"fb_mobile_achievement_unlocked";
-NSString *const FBSDKAppEventNameSpentCredits            = @"fb_mobile_spent_credits";
-
 //
 // Public event parameter names
 //
@@ -98,30 +79,6 @@ NSString *const FBSDKAppEventsLoggingResultNotification = @"com.facebook.sdk:FBS
 
 NSString *const FBSDKAppEventsOverrideAppIDBundleKey = @"FacebookLoggingOverrideAppID";
 
-//
-// Push Notifications
-//
-// Activities Endpoint Parameter
-static NSString *const FBSDKActivitesParameterPushDeviceToken = @"device_token";
-// Event Names
-static NSString *const FBSDKAppEventNamePushTokenObtained = @"fb_mobile_obtain_push_token";
-static NSString *const FBSDKAppEventNamePushOpened = @"fb_mobile_push_opened";
-// Event Parameter
-static NSString *const FBSDKAppEventParameterPushCampaign = @"fb_push_campaign";
-static NSString *const FBSDKAppEventParameterPushAction = @"fb_push_action";
-// Payload Keys
-static NSString *const FBSDKAppEventsPushPayloadKey = @"fb_push_payload";
-static NSString *const FBSDKAppEventsPushPayloadCampaignKey = @"campaign";
-
-//
-// Augmentation of web browser constants
-//
-NSString *const FBSDKAppEventsWKWebViewMessagesPixelIDKey = @"pixelID";
-NSString *const FBSDKAppEventsWKWebViewMessagesHandlerKey = @"fbmqHandler";
-NSString *const FBSDKAppEventsWKWebViewMessagesEventKey = @"event";
-NSString *const FBSDKAppEventsWKWebViewMessagesParamsKey = @"params";
-NSString *const FBSDKAPPEventsWKWebViewMessagesProtocolKey = @"fbmq-0.1";
-
 
 #define NUM_LOG_EVENTS_TO_TRY_TO_FLUSH_AFTER 100
 #define FLUSH_PERIOD_IN_SECONDS 15
@@ -135,8 +92,6 @@ static NSString *g_overrideAppID = nil;
 @property (nonatomic, readwrite) FBSDKAppEventsFlushBehavior flushBehavior;
 //for testing only.
 @property (nonatomic, assign) BOOL disableTimer;
-
-@property (nonatomic, copy) NSString *pushNotificationsDeviceTokenString;
 
 @property (nonatomic, strong) dispatch_source_t flushTimer;
 @property (nonatomic, strong) dispatch_source_t attributionIDRecheckTimer;
@@ -260,35 +215,6 @@ static NSString *g_overrideAppID = nil;
                                    accessToken:accessToken];
 }
 
-/*
- * Push Notifications Logging
- */
-
-+ (void)logPushNotificationOpen:(NSDictionary *)payload
-{
-  [self logPushNotificationOpen:payload action:nil];
-}
-
-+ (void)logPushNotificationOpen:(NSDictionary *)payload action:(NSString *)action
-{
-  NSDictionary *facebookPayload = payload[FBSDKAppEventsPushPayloadKey];
-  if (!facebookPayload) {
-    return;
-  }
-  NSString *campaign = facebookPayload[FBSDKAppEventsPushPayloadCampaignKey];
-  if (campaign.length == 0) {
-    [FBSDKLogger singleShotLogEntry:FBSDKLoggingBehaviorDeveloperErrors
-                           logEntry:@"Malformed payload specified for logging a push notification open."];
-    return;
-  }
-
-  NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:campaign forKey:FBSDKAppEventParameterPushCampaign];
-  if (action) {
-    parameters[FBSDKAppEventParameterPushAction] = action;
-  }
-  [self logEvent:FBSDKAppEventNamePushOpened parameters:parameters];
-}
-
 + (void)activateApp
 {
   [FBSDKAppEventsUtility ensureOnMainThread:NSStringFromSelector(_cmd) className:NSStringFromClass(self)];
@@ -298,26 +224,6 @@ static NSString *g_overrideAppID = nil;
   FBSDKAppEvents *instance = [FBSDKAppEvents singleton];
   [instance publishInstall];
   [instance fetchServerConfiguration:NULL];
-}
-
-+ (void)setPushNotificationsDeviceToken:(NSData *)deviceToken
-{
-  NSString *deviceTokenString = [FBSDKInternalUtility hexadecimalStringFromData:deviceToken];
-  if (deviceTokenString == nil) {
-    [FBSDKAppEvents singleton].pushNotificationsDeviceTokenString = nil;
-    return;
-  }
-
-  if (![deviceTokenString isEqualToString:([FBSDKAppEvents singleton].pushNotificationsDeviceTokenString)]) {
-    [FBSDKAppEvents singleton].pushNotificationsDeviceTokenString = deviceTokenString;
-
-    [FBSDKAppEvents logEvent:FBSDKAppEventNamePushTokenObtained];
-
-    // Unless the behavior is set to only allow explicit flushing, we go ahead and flush the event
-    if ([FBSDKAppEvents flushBehavior] != FBSDKAppEventsFlushBehaviorExplicitOnly) {
-      [[FBSDKAppEvents singleton] flushForReason:FBSDKAppEventsFlushReasonEagerlyFlushingEvent];
-    }
-  }
 }
 
 + (FBSDKAppEventsFlushBehavior)flushBehavior
@@ -709,9 +615,6 @@ static NSString *g_overrideAppID = nil;
     postParameters[@"custom_events"] = encodedEvents;
     if (appEventsState.numSkipped > 0) {
       postParameters[@"num_skipped_events"] = [NSString stringWithFormat:@"%lu", (unsigned long)appEventsState.numSkipped];
-    }
-    if (self.pushNotificationsDeviceTokenString) {
-      postParameters[FBSDKActivitesParameterPushDeviceToken] = self.pushNotificationsDeviceTokenString;
     }
 
     NSString *loggingEntry = nil;
