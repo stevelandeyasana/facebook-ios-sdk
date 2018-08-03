@@ -43,21 +43,7 @@
 #import "FBSDKContainerViewController.h"
 #endif
 
-NSString *const FBSDKApplicationDidBecomeActiveNotification = @"com.facebook.sdk.FBSDKApplicationDidBecomeActiveNotification";
-
-static NSString *const FBSDKAppLinkInboundEvent = @"fb_al_inbound";
-
 @implementation FBSDKApplicationDelegate
-{
-#if !TARGET_OS_TV
-  FBSDKBridgeAPIRequest *_pendingRequest;
-  id<FBSDKURLOpening> _pendingURLOpen;
-  SFAuthenticationSession *_authenticationSession NS_AVAILABLE_IOS(11_0);
-#endif
-  BOOL _expectingBackground;
-  UIViewController *_safariViewController;
-  BOOL _isDismissingSafariViewController;
-}
 
 #pragma mark - Class Methods
 
@@ -135,72 +121,15 @@ static NSString *const FBSDKAppLinkInboundEvent = @"fb_al_inbound";
   return NO;
 }
 
-- (void)applicationDidEnterBackground:(NSNotification *)notification
-{
-  _active = NO;
-  _expectingBackground = NO;
-}
-
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
   // Auto log basic events in case autoLogAppEventsEnabled is set
   if ([[FBSDKSettings autoLogAppEventsEnabled] boolValue]) {
     [FBSDKAppEvents activateApp];
   }
-  //  _expectingBackground can be YES if the caller started doing work (like login)
-  // within the app delegate's lifecycle like openURL, in which case there
-  // might have been a "didBecomeActive" event pending that we want to ignore.
-  BOOL notExpectingBackground = !_expectingBackground && !_safariViewController && !_isDismissingSafariViewController;
-#if !TARGET_OS_TV
-  if (@available(iOS 11.0, *)) {
-    notExpectingBackground = notExpectingBackground && !_authenticationSession;
-  }
-#endif
-  if (notExpectingBackground) {
-    _active = YES;
-    [[NSNotificationCenter defaultCenter] postNotificationName:FBSDKApplicationDidBecomeActiveNotification object:self];
-  }
 }
 
 #pragma mark - Helper Methods
-
-- (void)_logIfAppLinkEvent:(NSURL *)url
-{
-  if (!url) {
-    return;
-  }
-  NSDictionary *params = [FBSDKUtility dictionaryWithQueryString:url.query];
-  NSString *applinkDataString = params[@"al_applink_data"];
-  if (!applinkDataString) {
-    return;
-  }
-
-  NSDictionary *applinkData = [FBSDKInternalUtility objectForJSONString:applinkDataString error:NULL];
-  if (!applinkData) {
-    return;
-  }
-
-  NSString *targetURLString = applinkData[@"target_url"];
-  NSURL *targetURL = [targetURLString isKindOfClass:[NSString class]] ? [NSURL URLWithString:targetURLString] : nil;
-
-  NSMutableDictionary *logData = [[NSMutableDictionary alloc] init];
-  [FBSDKInternalUtility dictionary:logData setObject:[targetURL absoluteString] forKey:@"targetURL"];
-  [FBSDKInternalUtility dictionary:logData setObject:[targetURL host] forKey:@"targetURLHost"];
-
-  NSDictionary *refererData = applinkData[@"referer_data"];
-  if (refererData) {
-    [FBSDKInternalUtility dictionary:logData setObject:refererData[@"target_url"] forKey:@"referralTargetURL"];
-    [FBSDKInternalUtility dictionary:logData setObject:refererData[@"url"] forKey:@"referralURL"];
-    [FBSDKInternalUtility dictionary:logData setObject:refererData[@"app_name"] forKey:@"referralAppName"];
-  }
-  [FBSDKInternalUtility dictionary:logData setObject:[url absoluteString] forKey:@"inputURL"];
-  [FBSDKInternalUtility dictionary:logData setObject:[url scheme] forKey:@"inputURLScheme"];
-
-  [FBSDKAppEvents logImplicitEvent:FBSDKAppLinkInboundEvent
-                        valueToSum:nil
-                        parameters:logData
-                       accessToken:nil];
-}
 
 - (void)_logSDKInitialize
 {
