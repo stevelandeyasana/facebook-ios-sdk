@@ -87,126 +87,12 @@ NSString *const FBSDKAppEventParameterNameDescription            = @"fb_descript
 NSString *const FBSDKAppEventParameterValueNo                    = @"0";
 NSString *const FBSDKAppEventParameterValueYes                   = @"1";
 
-//
-// Event names internal to this file
-//
-NSString *const FBSDKAppEventNamePurchased        = @"fb_mobile_purchase";
-
-NSString *const FBSDKAppEventNameLoginViewUsage                   = @"fb_login_view_usage";
-NSString *const FBSDKAppEventNameShareSheetLaunch                 = @"fb_share_sheet_launch";
-NSString *const FBSDKAppEventNameShareSheetDismiss                = @"fb_share_sheet_dismiss";
-NSString *const FBSDKAppEventNameShareTrayDidLaunch               = @"fb_share_tray_did_launch";
-NSString *const FBSDKAppEventNameShareTrayDidSelectActivity       = @"fb_share_tray_did_select_activity";
-NSString *const FBSDKAppEventNamePermissionsUILaunch              = @"fb_permissions_ui_launch";
-NSString *const FBSDKAppEventNamePermissionsUIDismiss             = @"fb_permissions_ui_dismiss";
-NSString *const FBSDKAppEventNameFBDialogsPresentShareDialog      = @"fb_dialogs_present_share";
-NSString *const FBSDKAppEventNameFBDialogsPresentShareDialogPhoto = @"fb_dialogs_present_share_photo";
-NSString *const FBSDKAppEventNameFBDialogsPresentShareDialogOG    = @"fb_dialogs_present_share_og";
-NSString *const FBSDKAppEventNameFBDialogsPresentLikeDialogOG     = @"fb_dialogs_present_like_og";
-NSString *const FBSDKAppEventNameFBDialogsPresentMessageDialog      = @"fb_dialogs_present_message";
-NSString *const FBSDKAppEventNameFBDialogsPresentMessageDialogPhoto = @"fb_dialogs_present_message_photo";
-NSString *const FBSDKAppEventNameFBDialogsPresentMessageDialogOG    = @"fb_dialogs_present_message_og";
-
-NSString *const FBSDKAppEventNameFBDialogsNativeLoginDialogStart  = @"fb_dialogs_native_login_dialog_start";
-NSString *const FBSDKAppEventsNativeLoginDialogStartTime          = @"fb_native_login_dialog_start_time";
-
-NSString *const FBSDKAppEventNameFBDialogsNativeLoginDialogEnd    = @"fb_dialogs_native_login_dialog_end";
-NSString *const FBSDKAppEventsNativeLoginDialogEndTime            = @"fb_native_login_dialog_end_time";
-
-NSString *const FBSDKAppEventNameFBDialogsWebLoginCompleted       = @"fb_dialogs_web_login_dialog_complete";
-NSString *const FBSDKAppEventsWebLoginE2E                         = @"fb_web_login_e2e";
-
-NSString *const FBSDKAppEventNameFBSessionAuthStart               = @"fb_mobile_login_start";
-NSString *const FBSDKAppEventNameFBSessionAuthEnd                 = @"fb_mobile_login_complete";
-NSString *const FBSDKAppEventNameFBSessionAuthMethodStart         = @"fb_mobile_login_method_start";
-NSString *const FBSDKAppEventNameFBSessionAuthMethodEnd           = @"fb_mobile_login_method_complete";
-
-NSString *const FBSDKAppEventNameFBSDKLikeButtonImpression        = @"fb_like_button_impression";
-NSString *const FBSDKAppEventNameFBSDKLoginButtonImpression       = @"fb_login_button_impression";
-NSString *const FBSDKAppEventNameFBSDKSendButtonImpression        = @"fb_send_button_impression";
-NSString *const FBSDKAppEventNameFBSDKShareButtonImpression       = @"fb_share_button_impression";
-NSString *const FBSDKAppEventNameFBSDKLiveStreamingButtonImpression = @"fb_live_streaming_button_impression";
-
-NSString *const FBSDKAppEventNameFBSDKSmartLoginService      = @"fb_smart_login_service";
-
-NSString *const FBSDKAppEventNameFBSDKLikeButtonDidTap  = @"fb_like_button_did_tap";
-NSString *const FBSDKAppEventNameFBSDKLoginButtonDidTap  = @"fb_login_button_did_tap";
-NSString *const FBSDKAppEventNameFBSDKSendButtonDidTap  = @"fb_send_button_did_tap";
-NSString *const FBSDKAppEventNameFBSDKShareButtonDidTap  = @"fb_share_button_did_tap";
-NSString *const FBSDKAppEventNameFBSDKLiveStreamingButtonDidTap  = @"fb_live_streaming_button_did_tap";
-
-NSString *const FBSDKAppEventNameFBSDKLikeControlDidDisable          = @"fb_like_control_did_disable";
-NSString *const FBSDKAppEventNameFBSDKLikeControlDidLike             = @"fb_like_control_did_like";
-NSString *const FBSDKAppEventNameFBSDKLikeControlDidPresentDialog    = @"fb_like_control_did_present_dialog";
-NSString *const FBSDKAppEventNameFBSDKLikeControlDidTap              = @"fb_like_control_did_tap";
-NSString *const FBSDKAppEventNameFBSDKLikeControlDidUnlike           = @"fb_like_control_did_unlike";
-NSString *const FBSDKAppEventNameFBSDKLikeControlError               = @"fb_like_control_error";
-NSString *const FBSDKAppEventNameFBSDKLikeControlImpression          = @"fb_like_control_impression";
-NSString *const FBSDKAppEventNameFBSDKLikeControlNetworkUnavailable  = @"fb_like_control_network_unavailable";
-
-NSString *const FBSDLAppEventNameFBSDKEventShareDialogResult =              @"fb_dialog_share_result";
-NSString *const FBSDKAppEventNameFBSDKEventMessengerShareDialogResult =     @"fb_messenger_dialog_share_result";
-NSString *const FBSDKAppEventNameFBSDKEventAppInviteShareDialogResult =     @"fb_app_invite_dialog_share_result";
-
-NSString *const FBSDKAppEventNameFBSDKEventShareDialogShow =            @"fb_dialog_share_show";
-NSString *const FBSDKAppEventNameFBSDKEventMessengerShareDialogShow =   @"fb_messenger_dialog_share_show";
-NSString *const FBSDKAppEventNameFBSDKEventAppInviteShareDialogShow =   @"fb_app_invite_share_show";
-
-NSString *const FBSDKAppEventNameFBSessionFASLoginDialogResult = @"fb_mobile_login_fas_dialog_result";
-
-NSString *const FBSDKAppEventNameFBSDKLiveStreamingStart        = @"fb_sdk_live_streaming_start";
-NSString *const FBSDKAppEventNameFBSDKLiveStreamingStop         = @"fb_sdk_live_streaming_stop";
-NSString *const FBSDKAppEventNameFBSDKLiveStreamingPause        = @"fb_sdk_live_streaming_pause";
-NSString *const FBSDKAppEventNameFBSDKLiveStreamingResume       = @"fb_sdk_live_streaming_resume";
-NSString *const FBSDKAppEventNameFBSDKLiveStreamingError        = @"fb_sdk_live_streaming_error";
-NSString *const FBSDKAppEventNameFBSDKLiveStreamingUpdateStatus = @"fb_sdk_live_streaming_update_status";
-NSString *const FBSDKAppEventNameFBSDKLiveStreamingVideoID      = @"fb_sdk_live_streaming_video_id";
-NSString *const FBSDKAppEventNameFBSDKLiveStreamingMic          = @"fb_sdk_live_streaming_mic";
-NSString *const FBSDKAppEventNameFBSDKLiveStreamingCamera       = @"fb_sdk_live_streaming_camera";
-
 // Event Parameters internal to this file
-NSString *const FBSDKAppEventParameterDialogOutcome               = @"fb_dialog_outcome";
-NSString *const FBSDKAppEventParameterDialogErrorMessage          = @"fb_dialog_outcome_error_message";
-NSString *const FBSDKAppEventParameterDialogMode                  = @"fb_dialog_mode";
-NSString *const FBSDKAppEventParameterDialogShareContentType      = @"fb_dialog_share_content_type";
-NSString *const FBSDKAppEventParameterDialogShareContentUUID      = @"fb_dialog_share_content_uuid";
-NSString *const FBSDKAppEventParameterDialogShareContentPageID    = @"fb_dialog_share_content_page_id";
-NSString *const FBSDKAppEventParameterShareTrayActivityName       = @"fb_share_tray_activity";
-NSString *const FBSDKAppEventParameterShareTrayResult             = @"fb_share_tray_result";
 NSString *const FBSDKAppEventParameterLogTime = @"_logTime";
 NSString *const FBSDKAppEventParameterEventName = @"_eventName";
 NSString *const FBSDKAppEventParameterImplicitlyLogged = @"_implicitlyLogged";
 
-NSString *const FBSDKAppEventParameterLiveStreamingPrevStatus    = @"live_streaming_prev_status";
-NSString *const FBSDKAppEventParameterLiveStreamingStatus        = @"live_streaming_status";
-NSString *const FBSDKAppEventParameterLiveStreamingError         = @"live_streaming_error";
-NSString *const FBSDKAppEventParameterLiveStreamingVideoID       = @"live_streaming_video_id";
-NSString *const FBSDKAppEventParameterLiveStreamingMicEnabled    = @"live_streaming_mic_enabled";
-NSString *const FBSDKAppEventParameterLiveStreamingCameraEnabled = @"live_streaming_camera_enabled";
-
 // Event parameter values internal to this file
-NSString *const FBSDKAppEventsDialogOutcomeValue_Completed = @"Completed";
-NSString *const FBSDKAppEventsDialogOutcomeValue_Cancelled = @"Cancelled";
-NSString *const FBSDKAppEventsDialogOutcomeValue_Failed    = @"Failed";
-
-NSString *const FBSDKAppEventsDialogShareModeAutomatic      = @"Automatic";
-NSString *const FBSDKAppEventsDialogShareModeBrowser        = @"Browser";
-NSString *const FBSDKAppEventsDialogShareModeNative         = @"Native";
-NSString *const FBSDKAppEventsDialogShareModeShareSheet     = @"ShareSheet";
-NSString *const FBSDKAppEventsDialogShareModeWeb            = @"Web";
-NSString *const FBSDKAppEventsDialogShareModeFeedBrowser    = @"FeedBrowser";
-NSString *const FBSDKAppEventsDialogShareModeFeedWeb        = @"FeedWeb";
-NSString *const FBSDKAppEventsDialogShareModeUnknown        = @"Unknown";
-
-NSString *const FBSDKAppEventsDialogShareContentTypeOpenGraph                         = @"OpenGraph";
-NSString *const FBSDKAppEventsDialogShareContentTypeStatus                            = @"Status";
-NSString *const FBSDKAppEventsDialogShareContentTypePhoto                             = @"Photo";
-NSString *const FBSDKAppEventsDialogShareContentTypeVideo                             = @"Video";
-NSString *const FBSDKAppEventsDialogShareContentTypeCamera                            = @"Camera";
-NSString *const FBSDKAppEventsDialogShareContentTypeMessengerGenericTemplate          = @"GenericTemplate";
-NSString *const FBSDKAppEventsDialogShareContentTypeMessengerMediaTemplate            = @"MediaTemplate";
-NSString *const FBSDKAppEventsDialogShareContentTypeMessengerOpenGraphMusicTemplate   = @"OpenGraphMusicTemplate";
-NSString *const FBSDKAppEventsDialogShareContentTypeUnknown                           = @"Unknown";
 
 NSString *const FBSDKAppEventsLoggingResultNotification = @"com.facebook.sdk:FBSDKAppEventsLoggingResultNotification";
 
@@ -372,52 +258,6 @@ static NSString *g_overrideAppID = nil;
                                     parameters:parameters
                             isImplicitlyLogged:(BOOL)parameters[FBSDKAppEventParameterImplicitlyLogged]
                                    accessToken:accessToken];
-}
-
-+ (void)logPurchase:(double)purchaseAmount
-           currency:(NSString *)currency
-{
-  [FBSDKAppEvents logPurchase:purchaseAmount
-                     currency:currency
-                   parameters:nil];
-}
-
-+ (void)logPurchase:(double)purchaseAmount
-           currency:(NSString *)currency
-         parameters:(NSDictionary *)parameters
-{
-  [FBSDKAppEvents logPurchase:purchaseAmount
-                     currency:currency
-                   parameters:parameters
-                  accessToken:nil];
-}
-
-+ (void)logPurchase:(double)purchaseAmount
-           currency:(NSString *)currency
-         parameters:(NSDictionary *)parameters
-        accessToken:(FBSDKAccessToken *)accessToken
-{
-
-  // A purchase event is just a regular logged event with a given event name
-  // and treating the currency value as going into the parameters dictionary.
-  NSDictionary *newParameters;
-  if (!parameters) {
-    newParameters = @{ FBSDKAppEventParameterNameCurrency : currency };
-  } else {
-    newParameters = [NSMutableDictionary dictionaryWithDictionary:parameters];
-    [newParameters setValue:currency forKey:FBSDKAppEventParameterNameCurrency];
-  }
-
-  [FBSDKAppEvents logEvent:FBSDKAppEventNamePurchased
-                valueToSum:[NSNumber numberWithDouble:purchaseAmount]
-                parameters:newParameters
-               accessToken:accessToken];
-
-  // Unless the behavior is set to only allow explicit flushing, we go ahead and flush, since purchase events
-  // are relatively rare and relatively high value and worth getting across on wire right away.
-  if ([FBSDKAppEvents flushBehavior] != FBSDKAppEventsFlushBehaviorExplicitOnly) {
-    [[FBSDKAppEvents singleton] flushForReason:FBSDKAppEventsFlushReasonEagerlyFlushingEvent];
-  }
 }
 
 /*
