@@ -31,7 +31,6 @@
 {
   if (self = [super init]) {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_checkAccessTokenExpirationDate) name:FBSDKAccessTokenDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_checkAccessTokenExpirationDate) name:FBSDKApplicationDidBecomeActiveNotification object:nil];
     [self _checkAccessTokenExpirationDate];
   }
   return self;

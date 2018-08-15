@@ -23,8 +23,6 @@
 
 #import "FBSDKCoreKit+Internal.h"
 
-FBSDK_EXTERN NSString *const FBSDKApplicationDidBecomeActiveNotification;
-
 @class FBSDKApplicationCall;
 
 @interface FBSDKApplicationDelegate ()

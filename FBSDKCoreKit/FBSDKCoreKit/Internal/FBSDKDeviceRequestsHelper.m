@@ -66,45 +66,6 @@ static NSMapTable *g_mdnsAdvertisementServices;
   return [[NSString alloc] initWithData:jsonDeviceInfo encoding:NSUTF8StringEncoding];
 }
 
-+ (BOOL)startAdvertisementService:(NSString *)loginCode withDelegate:(id<NSNetServiceDelegate>)delegate;
-{
-   static NSString *sdkVersion = nil;
-  static dispatch_once_t onceToken;
-  dispatch_once(&onceToken, ^{
-     // Dots in the version will mess up the bonjour DNS record parsing
-    sdkVersion = [[FBSDKSettings sdkVersion] stringByReplacingOccurrencesOfString:@"." withString:@"|"];
-    if (sdkVersion.length > 10 ||
-        ![[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[sdkVersion characterAtIndex:0]]) {
-      sdkVersion = @"dev";
-    }
-  });
-  NSString *serviceName = [NSString stringWithFormat:@"%@_%@_%@",
-                                                     FBSDK_HEADER,
-                                                     [NSString stringWithFormat:@"%@-%@",
-                                                                                FBSDK_FLAVOR,
-                                                                                sdkVersion
-                                                     ],
-                                                     loginCode
-                          ];
-  if (serviceName.length > 60) {
-    [FBSDKLogger singleShotLogEntry:FBSDKLoggingBehaviorDeveloperErrors logEntry:@"serviceName exceeded 60 characters"];
-  }
-  NSNetService *mdnsAdvertisementService = [[NSNetService alloc]
-                                            initWithDomain:@"local."
-                                            type:FBSDK_SERVICE_TYPE
-                                            name:serviceName
-                                            port:0];
-  mdnsAdvertisementService.delegate = delegate;
-  [mdnsAdvertisementService publishWithOptions:NSNetServiceNoAutoRename | NSNetServiceListenForConnections];
-  [FBSDKAppEvents logImplicitEvent:FBSDKAppEventNameFBSDKSmartLoginService
-                        valueToSum:nil
-                        parameters:nil
-                       accessToken:nil];
-  [g_mdnsAdvertisementServices setObject:mdnsAdvertisementService forKey:delegate];
-
-  return YES;
-}
-
 + (BOOL)isDelegate:(id<NSNetServiceDelegate>)delegate forAdvertisementService:(NSNetService *)service
 {
   NSNetService *mdnsAdvertisementService = [g_mdnsAdvertisementServices objectForKey:delegate];
